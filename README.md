@@ -1,5 +1,7 @@
 # E2E Test Automation with Playwright
 
+[![Playwright Tests](https://github.com/vjgit-369/E2E-test-automation/actions/workflows/playwright.yml/badge.svg)](https://github.com/vjgit-369/E2E-test-automation/actions/workflows/playwright.yml)
+
 This project contains end-to-end tests for automationexercise.com using Playwright.
 
 ## Test Scenarios
