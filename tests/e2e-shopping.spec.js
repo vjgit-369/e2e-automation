@@ -2,10 +2,22 @@ import { test, expect } from '@playwright/test';
 
 test.describe('E2E Shopping Journey', () => {
   test('Complete shopping flow', async ({ page }) => {
+    // Set default timeout for the entire test
+    test.setTimeout(120000);
+
     // User Registration
     await test.step('Register new user', async () => {
-      await page.goto('https://www.automationexercise.com/login');
-      await page.waitForLoadState('networkidle');
+      await page.goto('https://www.automationexercise.com/login', { timeout: 60000 });
+      
+      try {
+        // Wait for either the signup form or a network error
+        await Promise.race([
+          page.waitForLoadState('networkidle', { timeout: 60000 }),
+          page.waitForSelector("input[data-qa='signup-name']", { timeout: 60000 })
+        ]);
+      } catch (error) {
+        console.log('Initial page load took longer than expected, proceeding with test...');
+      }
       
       // Fill signup form
       await page.fill("input[data-qa='signup-name']", 'Test User');
@@ -13,7 +25,7 @@ test.describe('E2E Shopping Journey', () => {
       await page.click("button[data-qa='signup-button']");
       
       // Wait for registration form and verify
-      await page.waitForSelector('.login-form', { timeout: 30000 });
+      await page.waitForSelector('.login-form', { timeout: 60000 });
       
       // Fill registration form
       await page.check('#id_gender1, [name="title"][value="Mr"]');
@@ -38,36 +50,44 @@ test.describe('E2E Shopping Journey', () => {
       await page.click('button[data-qa="create-account"], button[type="submit"]');
       
       // Wait for account creation confirmation
-      await page.waitForSelector('h2.title:has-text("Account Created")', { timeout: 30000 });
+      await page.waitForSelector('h2.title:has-text("Account Created")', { timeout: 60000 });
       
       // Continue to homepage
       await page.click('[data-qa="continue-button"]');
-      await page.waitForLoadState('networkidle');
+      try {
+        await page.waitForLoadState('networkidle', { timeout: 60000 });
+      } catch (error) {
+        console.log('Homepage load took longer than expected, proceeding with test...');
+      }
     });
 
     // Product Search and Cart
     await test.step('Search and add product to cart', async () => {
       // Navigate to products page
       await page.click("a[href='/products']");
-      await page.waitForURL('**/products');
-      await page.waitForSelector('.features_items', { timeout: 30000 });
+      await page.waitForURL('**/products', { timeout: 60000 });
+      await page.waitForSelector('.features_items', { timeout: 60000 });
       
       // Get first product card and add to cart
       const firstProduct = page.locator('.features_items .product-image-wrapper').first();
-      await firstProduct.waitFor({ state: 'visible' });
+      await firstProduct.waitFor({ state: 'visible', timeout: 60000 });
       await firstProduct.hover();
       await page.click('.add-to-cart, .productinfo a.btn');
       
       // Wait for modal and view cart
-      await page.waitForSelector('.modal-content', { timeout: 30000 });
+      await page.waitForSelector('.modal-content', { timeout: 60000 });
       await page.click('p.text-center a[href="/view_cart"]');
-      await page.waitForLoadState('networkidle');
+      try {
+        await page.waitForLoadState('networkidle', { timeout: 60000 });
+      } catch (error) {
+        console.log('Cart page load took longer than expected, proceeding with test...');
+      }
     });
 
     // Cart and Checkout
     await test.step('Complete checkout process', async () => {
       // Verify cart page and proceed to checkout
-      await page.waitForSelector('#cart_info', { timeout: 30000 });
+      await page.waitForSelector('#cart_info', { timeout: 60000 });
       await page.click('.btn.btn-default.check_out');
       
       // Handle login modal if it appears
@@ -76,7 +96,7 @@ test.describe('E2E Shopping Journey', () => {
       }
       
       // Complete checkout process
-      await page.waitForSelector('#cart_items', { timeout: 30000 });
+      await page.waitForSelector('#cart_items', { timeout: 60000 });
       await page.click('.btn.btn-default.check_out');
       
       // Fill payment details
@@ -90,7 +110,7 @@ test.describe('E2E Shopping Journey', () => {
       await page.click('#submit');
       
       // Wait for order confirmation message
-      await page.waitForSelector('.title.text-center', { timeout: 30000 });
+      await page.waitForSelector('.title.text-center', { timeout: 60000 });
       const confirmationText = await page.textContent('.title.text-center');
       
       // Take a screenshot of the order confirmation
@@ -101,9 +121,6 @@ test.describe('E2E Shopping Journey', () => {
       
       // Wait for 5 seconds to see the confirmation message clearly
       await page.waitForTimeout(5000);
-      
-      // End test here - don't proceed further
-      test.skip();
     });
   });
 });

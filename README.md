@@ -27,21 +27,22 @@ npx playwright install
 
 Run tests in headed mode:
 ```bash
-npx playwright test --headed
+npm run test:headed
 ```
 
 Run tests in headless mode:
 ```bash
-npx playwright test
+npm run test
 ```
 
 View HTML report:
 ```bash
-npx playwright show-report
+npm run report
 ```
 
 ## Project Structure
 
 - `tests/` - Test files
-- `playwright.config.ts` - Playwright configuration
+- `.github/workflows/` - GitHub Actions workflow
+- `playwright.config.js` - Playwright configuration
 - `package.json` - Project dependencies and scripts
