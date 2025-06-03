@@ -3,16 +3,26 @@ const { defineConfig } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests',
-  use: {
-    headless: process.env.PLAYWRIGHT_HEADLESS === 'true',
-    viewport: { width: 1280, height: 720 },
-    actionTimeout: 30000,
-    navigationTimeout: 30000
+  timeout: 120000,
+  expect: {
+    timeout: 5000
   },
-  projects: [{
-    name: 'chromium',
-    use: {
-      browserName: 'chromium'
-    }
-  }]
+  reporter: [
+    ['line'],
+    ['allure-playwright']
+  ],
+  use: {
+    actionTimeout: 0,
+    trace: 'on-first-retry',
+    video: 'on-first-retry',
+    screenshot: 'only-on-failure'
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: {
+        browserName: 'chromium',
+      },
+    },
+  ],
 }); 

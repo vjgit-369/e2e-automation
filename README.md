@@ -1,50 +1,75 @@
-# E2E Test Automation with Playwright
+# E2E Automation with Playwright
 
-[![Playwright Tests](https://github.com/vjgit-369/E2E-test-automation/actions/workflows/playwright.yml/badge.svg)](https://github.com/vjgit-369/E2E-test-automation/actions/workflows/playwright.yml)
+This project demonstrates end-to-end testing of an e-commerce website using Playwright with JavaScript and implements the Page Object Model pattern.
 
-This project contains end-to-end tests for automationexercise.com using Playwright.
+## Features
 
-## Test Scenarios
+- Page Object Model implementation
+- End-to-end test coverage for shopping flow
+- Allure reporting integration
+- Automated user registration and checkout process
+- Screenshot capture on test failure
 
-The test suite covers the following E2E flow:
-1. User Registration
-2. Product Selection
-3. Shopping Cart
-4. Checkout Process
-5. Order Confirmation
+## Prerequisites
+
+- Node.js (v14 or higher)
+- npm (v6 or higher)
 
 ## Setup
 
-1. Install dependencies:
+1. Clone the repository:
+```bash
+git clone https://github.com/vjgit-369/E2E_Ecom_POM.git
+cd E2E_Ecom_POM
+```
+
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-2. Install Playwright browsers:
-```bash
-npx playwright install
-```
-
 ## Running Tests
 
-Run tests in headed mode:
+Run all tests:
 ```bash
-npm run test:headed
+npx playwright test
 ```
 
-Run tests in headless mode:
+Run a specific test file:
 ```bash
-npm run test
+npx playwright test tests/e2e-shopping.spec.js
 ```
 
-View HTML report:
+## Generate Allure Report
+
+1. Run tests with Allure reporter:
 ```bash
-npm run report
+npx playwright test
+```
+
+2. Generate the report:
+```bash
+npx allure generate allure-results -o allure-report --clean
+```
+
+3. Open the report:
+```bash
+npx allure open allure-report
 ```
 
 ## Project Structure
 
-- `tests/` - Test files
-- `.github/workflows/` - GitHub Actions workflow
-- `playwright.config.js` - Playwright configuration
-- `package.json` - Project dependencies and scripts
+```
+├── tests/
+│   ├── pageObjects/
+│   │   ├── BasePage.js
+│   │   ├── RegistrationPage.js
+│   │   └── ShoppingPage.js
+│   └── e2e-shopping.spec.js
+├── playwright.config.js
+└── package.json
+```
+
+## Contributing
+
+Feel free to submit issues and enhancement requests.

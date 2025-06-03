@@ -8,7 +8,9 @@
     "report": "playwright show-report"
   },
   "devDependencies": {
-    "@playwright/test": "^1.42.1"
+    "@playwright/test": "^1.52.0",
+    "allure-commandline": "^2.34.0",
+    "allure-playwright": "^3.2.2"
   },
   "main": "index.js",
   "directories": {
