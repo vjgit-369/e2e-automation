@@ -34,26 +34,10 @@ pipeline {
                 }
             }
         }
-
-        stage('Generate Allure Report') {
-            steps {
-                script {
-                    bat 'npx allure generate allure-results -o allure-report --clean'
-                }
-            }
-        }
     }
 
     post {
         always {
-            allure([
-                includeProperties: false,
-                jdk: '',
-                properties: [],
-                reportBuildPolicy: 'ALWAYS',
-                results: [[path: 'allure-results']]
-            ])
-
             publishHTML([
                 allowMissing: false,
                 alwaysLinkToLastBuild: true,
